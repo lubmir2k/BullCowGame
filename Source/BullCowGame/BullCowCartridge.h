@@ -16,7 +16,8 @@ public:
 	virtual void OnInput(const FString& Input) override;
 	void SetupGame();
 	void EndGame();
-	void ProcessGuess(FString Guess, int32 Counter);
+	void ProcessGuess(FString Guess);
+	bool IsIsogram(FString Word) const;
 
 	// Your declarations go below!
 private:
