@@ -1,12 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "BullCowCartridge.h"
+#include "Console/HiddenWordList.h"
 
-void UBullCowCartridge::BeginPlay() // When the game starts
+void UBullCowCartridge::BeginPlay()
 {
     Super::BeginPlay();
 
     SetupGame();
 
+    PrintLine(TEXT("The number of possible words is %i."), Words.Num());// Debug Line
     PrintLine(TEXT("The HiddenWord is: %s."), *HiddenWord);// Debug Line   
 }
 
@@ -22,11 +24,6 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
         ProcessGuess(Input);
     }
     
-    
-    // If No Show GameOver and HiddenWord?
-    // Prompt To Play Again, Press Enter To Play Again?
-    // Check User Input
-    // PlayAgain Or Quit
 }
 
 void UBullCowCartridge::SetupGame()
@@ -41,12 +38,6 @@ void UBullCowCartridge::SetupGame()
     PrintLine(TEXT("Guess the %i letter word!"), HiddenWord.Len());
     PrintLine(TEXT("You have %i lives."), Lives);
     PrintLine(TEXT("Type in your guess and \npress enter to continue...")); // Prompt Player For Guess
-
-    /*
-    const TCHAR HW[] = TEXT("Cakes");
-    const TCHAR HW[] = { TEXT('c'), TEXT('a'), TEXT('k'), TEXT('e'), TEXT('s'), TEXT('\0') };
-    PrintLine(TEXT("Character 1 of the hidden word is: %c"), HiddenWord[0]); // Print "c"
-    */
 }
 
 void UBullCowCartridge::EndGame()
@@ -95,14 +86,14 @@ void UBullCowCartridge::ProcessGuess(FString Guess)
 
 bool UBullCowCartridge::IsIsogram(FString Word) const
 {
-    //int32 Index = 0;
-    //int32 Comparison = Index + 1;
-    
-    for (int32 Index = 0, Comparison = Index + 1; Comparison < Word.Len(); Comparison++)
+    for(int32 Index = 0; Index < Word.Len(); Index++)
     {
-        if(Word[Index] == Word[Comparison])
+        for (int32 Comparison = Index + 1; Comparison < Word.Len(); Comparison++)
         {
-            return false;
+            if(Word[Index] == Word[Comparison])
+            {
+                return false;
+            }
         }
     }
     return true;
