@@ -1,18 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "BullCowCartridge.h"
 #include "Console/HiddenWordList.h"
+//#include "Math/UnrealMathUtility.h"
 
 void UBullCowCartridge::BeginPlay()
 {
     Super::BeginPlay();
-
-    
     
     SetupGame();
-
-    PrintLine(TEXT("The number of possible words is %i."), Words.Num());
-    PrintLine(TEXT("The number of valid words is %i."), GetValidWords(Words).Num());
-    PrintLine(TEXT("The HiddenWord is: %s."), *HiddenWord);// Debug Line   
 }
 
 void UBullCowCartridge::OnInput(const FString& Input) // When the player hits enter
@@ -34,13 +29,14 @@ void UBullCowCartridge::SetupGame()
     // Welcoming The Player
     PrintLine(TEXT("Welcome to Bull Cows!"));
     
-    HiddenWord = TEXT("cakes");
+    HiddenWord = GetValidWords(Words)[FMath::RandRange(0, GetValidWords(Words).Num() - 1)];
     Lives = HiddenWord.Len();
     bGameOver = false;
 
     PrintLine(TEXT("Guess the %i letter word!"), HiddenWord.Len());
     PrintLine(TEXT("You have %i lives."), Lives);
     PrintLine(TEXT("Type in your guess and \npress enter to continue...")); // Prompt Player For Guess
+    PrintLine(TEXT("The HiddenWord is: %s."), *HiddenWord);// Debug Line
 }
 
 void UBullCowCartridge::EndGame()
@@ -49,7 +45,7 @@ void UBullCowCartridge::EndGame()
     PrintLine(TEXT("Press enter to play again."));
 }
 
-void UBullCowCartridge::ProcessGuess(FString Guess)
+void UBullCowCartridge::ProcessGuess(const FString& Guess)
 {
     if (Guess.Len() != HiddenWord.Len())
     {
@@ -87,7 +83,7 @@ void UBullCowCartridge::ProcessGuess(FString Guess)
     PrintLine(TEXT("Trying guessing again, you have %i lives left"), Lives);
 }
 
-bool UBullCowCartridge::IsIsogram(FString Word) const
+bool UBullCowCartridge::IsIsogram(const FString& Word) const
 {
     for(int32 Index = 0; Index < Word.Len(); Index++)
     {
@@ -102,7 +98,7 @@ bool UBullCowCartridge::IsIsogram(FString Word) const
     return true;
 }
 
-TArray<FString> UBullCowCartridge::GetValidWords(TArray<FString> WordList) const
+TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList) const
 {
     TArray<FString> ValidWords;
 
