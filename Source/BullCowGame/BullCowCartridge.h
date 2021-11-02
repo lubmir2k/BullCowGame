@@ -24,4 +24,5 @@ private:
 	FString HiddenWord;
 	int32 Lives;
 	bool bGameOver;
+	TArray<FString> Isograms;
 };
